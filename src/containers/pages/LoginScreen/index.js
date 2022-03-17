@@ -10,10 +10,12 @@ import React, {useEffect, useState} from 'react';
 import {bgImage, passIcon, userIcon, logo1Icon} from '../../../asset';
 import {warnaAbu, windowHeight, windowWidth} from '../../../utils/constans';
 import CheckBox from '@react-native-community/checkbox';
-import Button from '../../../components/Button';
+import Button from '../../../components/atoms/Button';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [rememberMe, setRememberMe] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
@@ -36,6 +38,8 @@ const LoginScreen = () => {
               style={styles.inputUsername}
               placeholder="Username"
               placeholderTextColor={warnaAbu}
+              value={username}
+              onChangeText={val => setUsername(val)}
             />
           </View>
           <View style={styles.username}>
@@ -44,6 +48,8 @@ const LoginScreen = () => {
               style={styles.inputUsername}
               placeholder="Password"
               placeholderTextColor={warnaAbu}
+              value={password}
+              onChangeText={val => setPassword(val)}
             />
           </View>
           <View style={styles.checkboxView}>
@@ -55,7 +61,12 @@ const LoginScreen = () => {
             <Text style={styles.textRemember}>Remember Me</Text>
           </View>
           <View style={styles.btnLogin}>
-            <Button name="Login" />
+            <Button
+              name="Login"
+              onPress={() => {
+                navigation.navigate('Menu');
+              }}
+            />
           </View>
         </View>
       </ScrollView>
