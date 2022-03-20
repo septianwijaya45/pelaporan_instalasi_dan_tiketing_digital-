@@ -66,6 +66,7 @@ const LoginScreen = ({navigation}) => {
               onPress={() => {
                 navigation.navigate('Menu');
               }}
+              type="Login"
             />
           </View>
         </View>

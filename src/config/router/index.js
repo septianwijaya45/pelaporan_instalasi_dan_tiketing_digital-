@@ -5,12 +5,15 @@ import LoginScreen from '../../containers/pages/LoginScreen';
 import MenuScreen from '../../containers/pages/MenuScreen';
 import TugasInstalasi from '../../containers/pages/TugasInstalasiScreen';
 import DetailTugas from '../../containers/pages/TugasInstalasiScreen/detail';
+import FormLaporanInstalasi from '../../containers/pages/TugasInstalasiScreen/insert';
+import LaporanInstalasi from '../../containers/pages/LaporanInstalasiScreen';
+import DetailLaporans from '../../containers/pages/LaporanInstalasiScreen/detail';
 
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="FormLaporanInstalasi">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -32,6 +35,24 @@ const Router = () => {
       <Stack.Screen
         name="TugasDetail"
         component={DetailTugas}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="FormLaporanInstalasi"
+        component={FormLaporanInstalasi}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="LaporanInstalasi"
+        component={LaporanInstalasi}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="DetailLaporanInstalasi"
+        component={DetailLaporans}
         options={{
           headerShown: false,
         }}></Stack.Screen>

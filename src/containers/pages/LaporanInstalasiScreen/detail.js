@@ -1,11 +1,10 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
+import {windowHeight, windowWidth} from '../../../utils/constans';
 import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
-import {windowHeight, windowWidth} from '../../../utils/constans';
-import Button from '../../../components/atoms/Button';
 
-const DetailTugas = ({navigation, route}) => {
+const DetailLaporans = ({navigation, route}) => {
   const {title} = route.params;
   return (
     <View style={styles.container}>
@@ -38,93 +37,98 @@ const DetailTugas = ({navigation, route}) => {
           <ScrollView style={styles.subtitle}>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Kategori Instansi</Text>
+                <Text style={styles.textSubtitle}>Tanggal Mulai Instalasi</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Pemerintahan</Text>
+                <Text style={styles.textValue}>12-12-2021</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Nama Instalasi</Text>
+                <Text style={styles.textSubtitle}>
+                  Tanggal Selesai Instalasi
+                </Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Bank BRI</Text>
+                <Text style={styles.textValue}>13-12-2021</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Alamat</Text>
+                <Text style={styles.textSubtitle}>Tanggal Mulai Training</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Jl. Sigura Sigura No. 89</Text>
+                <Text style={styles.textValue}>14-12-2021</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>PIC (Penanggung Jawab)</Text>
+                <Text style={styles.textSubtitle}>
+                  Tanggal Selesai Training
+                </Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Agus Susanto</Text>
+                <Text style={styles.textValue}>15-12-2021</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>No. Telp PIC</Text>
+                <Text style={styles.textSubtitle}>Komponen Sistem</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>081212121212</Text>
+                <Text style={styles.textValue}>- Ticketing</Text>
+                <Text style={styles.textValue}>- Caller</Text>
+                <Text style={styles.textValue}>- Digital Singage</Text>
+                <Text style={styles.textValue}>- Hardware</Text>
+                <Text style={styles.textValue}>- Jaringan</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Jumlah Teknisi</Text>
+                <Text style={styles.textSubtitle}>Kondisi Sistem</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>2</Text>
+                <Text style={styles.textValue}>- Ticketing</Text>
+                <Text style={styles.textValue}>- Caller</Text>
+                <Text style={styles.textValue}>- Digital Singage</Text>
+                <Text style={styles.textValue}>- Hardware</Text>
+                <Text style={styles.textValue}>- Jaringan</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Nama Teknisi</Text>
+                <Text style={styles.textSubtitle}>Kondisi Sistem</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Teknisi 2, Teknisi 4</Text>
+                <Text style={styles.textValue}>Sistem Sedang Berjalan</Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Leader Teknisi</Text>
+                <Text style={styles.textSubtitle}>Problem Instalasi</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Teknisi 4</Text>
+                <Text style={styles.textValue}>
+                  Sistem Tidak Dapat Berjalan
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Tanggal Instalasi</Text>
+                <Text style={styles.textSubtitle}>Status</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>01-01-2022</Text>
+                <Text style={styles.textValue}>Diproses</Text>
               </View>
             </View>
           </ScrollView>
         </View>
       </View>
-      <View style={styles.button}>
-        <Button
-          name="Kerjakan"
-          type="Submit"
-          onPress={() => {
-            navigation.navigate('FormLaporanInstalasi');
-          }}
-        />
-      </View>
     </View>
   );
 };
 
-export default DetailTugas;
+export default DetailLaporans;
 
 const styles = StyleSheet.create({
   container: {
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: '#ffffff',
     width: windowWidth,
-    height: windowHeight * 0.8,
+    height: windowHeight * 0.85,
     marginTop: 20,
     borderRadius: 40,
   },
@@ -164,12 +168,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   subtitle: {
-    height: windowHeight * 0.7,
+    height: windowHeight * 0.75,
   },
   rowSubtitle: {
     marginTop: windowWidth * 0.1,
     marginLeft: windowWidth * 0.1,
     width: windowWidth * 0.5,
+    height: 'auto',
     flexDirection: 'row',
   },
   textSubtitle: {
@@ -177,14 +182,9 @@ const styles = StyleSheet.create({
   },
   rowValue: {
     marginLeft: windowWidth * 0.1,
-    width: windowWidth * 0.35,
+    width: windowWidth * 0.6,
   },
   textValue: {
     color: '#000000',
-  },
-  button: {
-    flexWrap: 'wrap-reverse',
-    marginRight: 20,
-    marginTop: 20,
   },
 });

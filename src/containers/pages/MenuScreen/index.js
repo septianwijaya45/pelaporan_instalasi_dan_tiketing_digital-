@@ -39,7 +39,10 @@ const MenuScreen = ({navigation}) => {
           </View>
           <Text style={styles.text2}>Tugas Instalasi</Text>
           <View style={styles.menu2}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('LaporanInstalasi');
+              }}>
               <View style={styles.menu21}>
                 <Image source={laporanIcon} style={styles.iconTugas} />
               </View>
