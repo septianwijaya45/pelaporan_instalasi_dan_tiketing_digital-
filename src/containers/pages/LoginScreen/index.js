@@ -5,17 +5,52 @@ import {
   ScrollView,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {bgImage, passIcon, userIcon, logo1Icon} from '../../../asset';
 import {warnaAbu, windowHeight, windowWidth} from '../../../utils/constans';
 import CheckBox from '@react-native-community/checkbox';
 import Button from '../../../components/atoms/Button';
+import axios from 'axios';
 
 const LoginScreen = ({navigation}) => {
+  const [errorMessage, setError] = useState('');
+  const [successMessage, setSuccess] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const submitLogin = () => {
+    if (!username && !password) {
+      Alert.alert('Gagal Login!', 'Username dan Password Harus Diisi!');
+      setError('Username dan Password Harus Diisi!');
+    } else if (!username) {
+      Alert.alert('Gagal Login!', 'Username Harus Diisi!');
+      setError('Username Harus Diisi!');
+    } else if (!password) {
+      Alert.alert('Gagal Login!', 'Password Harus Diisi!');
+      setError('Password Harus Diisi!');
+    } else {
+      const data = {
+        email: username,
+        password: password,
+      };
+      axios
+        .post(`http://localhost:8000/api/user/signin`, data)
+        .then(response => {
+          navigation.replace('Menu', {
+            user: response.data.user.role,
+            name: response.data.user.name,
+            token: response.data.user.token,
+          });
+        })
+        .catch(e => {
+          Alert.alert('Gagal Login!', 'Password Salah!');
+          setError('Password Salah!');
+        });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -50,6 +85,7 @@ const LoginScreen = ({navigation}) => {
               placeholderTextColor={warnaAbu}
               value={password}
               onChangeText={val => setPassword(val)}
+              secureTextEntry={true}
             />
           </View>
           <View style={styles.checkboxView}>
@@ -61,13 +97,16 @@ const LoginScreen = ({navigation}) => {
             <Text style={styles.textRemember}>Remember Me</Text>
           </View>
           <View style={styles.btnLogin}>
-            <Button
-              name="Login"
-              onPress={() => {
-                navigation.navigate('Menu');
-              }}
-              type="Login"
-            />
+            {!!errorMessage && (
+              <Text
+                style={{color: '#FF0000', marginTop: -20, marginBottom: 10}}>
+                {errorMessage}
+              </Text>
+            )}
+            {!!successMessage && (
+              <Text style={{color: '#27ae60'}}>{successMessage}</Text>
+            )}
+            <Button name="Login" onPress={submitLogin} type="Login" />
           </View>
         </View>
       </ScrollView>
@@ -140,6 +179,11 @@ const styles = StyleSheet.create({
   textRemember: {
     color: '#000000',
     textAlignVertical: 'center',
+  },
+  inputUsername: {
+    color: '#000000',
+    height: 40,
+    width: windowWidth * 0.4,
   },
   btnLogin: {
     textAlign: 'center',

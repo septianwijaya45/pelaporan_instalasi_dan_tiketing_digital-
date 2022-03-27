@@ -6,6 +6,7 @@ import {
   ScrollView,
   TextInput,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {windowHeight, windowWidth} from '../../../utils/constans';
@@ -16,8 +17,13 @@ import Input from '../../../components/atoms/Input';
 import CheckBox from '@react-native-community/checkbox';
 import {picture, plusIcon} from '../../../asset';
 import Button from '../../../components/atoms/Button';
+import axios from 'axios';
+import {CheckNumber} from '../../../utils/changeNumber';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import DocumentPicker from 'react-native-document-picker';
 
-const FormLaporanInstalasi = ({navigation, props}) => {
+const FormLaporanInstalasi = ({navigation, route}) => {
+  const {id} = route.params;
   // Jadwal
   const [tglMulaiInstalasi, setTglMulaiInstalasi] = useState();
   const [tglSelesaiInstalasi, setTglSelesaiInstalasi] = useState();
@@ -31,6 +37,13 @@ const FormLaporanInstalasi = ({navigation, props}) => {
   // Informasi
   const [kondisi, setKondisi] = useState('');
   const [problem, setProblem] = useState('');
+  // Foto
+  const [foto, setFoto] = useState([]);
+  const [uploadImage, setuploadImage] = useState();
+  const [Video, setVideo] = useState();
+  const [uploadVideo, setUploadVideo] = useState();
+  const [bast, setBast] = useState([]);
+  const [uploadBast, setuploadBast] = useState();
 
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
   const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
@@ -41,6 +54,8 @@ const FormLaporanInstalasi = ({navigation, props}) => {
   const [jadwal, setJadwal] = useState(true);
   const [informasi, setInformasi] = useState(false);
   const [bukti, setBukti] = useState(false);
+
+  // ==================== DATETIME PICKER ==================== //
 
   const showDatePicker1 = () => {
     setDatePickerVisibility1(true);
@@ -73,32 +88,64 @@ const FormLaporanInstalasi = ({navigation, props}) => {
 
   const handleConfirm1 = date => {
     const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    setTglMulaiInstalasi(`${day}-${month}-${year}`);
-    hideDatePicker();
+    const month = CheckNumber(date.getMonth());
+    const day = CheckNumber(date.getDate());
+    setTglMulaiInstalasi(`${year}-${month}-${day}`);
+    hideDatePicker1();
   };
   const handleConfirm2 = date => {
     const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    setTglSelesaiInstalasi(`${day}-${month}-${year}`);
-    hideDatePicker();
+    const month = CheckNumber(date.getMonth());
+    const day = CheckNumber(date.getDate());
+    setTglSelesaiInstalasi(`${year}-${month}-${day}`);
+    hideDatePicker2();
   };
   const handleConfirm3 = date => {
     const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    setTglMulaiTraining(`${day}-${month}-${year}`);
-    hideDatePicker();
+    const month = CheckNumber(date.getMonth());
+    const day = CheckNumber(date.getDate());
+    setTglMulaiTraining(`${year}-${month}-${day}`);
+    hideDatePicker3();
   };
   const handleConfirm4 = date => {
     const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    setTglSelesaiTraining(`${day}-${month}-${year}`);
-    hideDatePicker();
+    const month = CheckNumber(date.getMonth());
+    const day = CheckNumber(date.getDate());
+    setTglSelesaiTraining(`${year}-${month}-${day}`);
+    hideDatePicker4();
   };
+
+  // ==================== DATETIME PICKER ==================== //
+
+  // ==================== GET DATA ==================== //
+  const checkData = () => {
+    axios
+      .get(`http://localhost:8000/api/report_instalasi-check_data/${id}`)
+      .then(response => {
+        const data = response.data[0];
+        if (response.data != '') {
+          setTglMulaiInstalasi(data.startI_date);
+          setTglSelesaiInstalasi(data.completeI_date);
+          setTglMulaiTraining(data.startT_date);
+          setTglSelesaiTraining(data.completeT_date);
+          setTiketing(data.name == 'ticketing' ? true : false);
+          setCaller(data.name == 'caller' ? true : false);
+          setDigitalSignage(data.name == 'digital signame' ? true : false);
+          setHardware(data.name == 'hardware' ? true : false);
+          setJaringan(data.name == 'jaringan' ? true : false);
+          setKondisi(data.condition);
+          setProblem(data.problem);
+        }
+      });
+  };
+
+  useEffect(() => {
+    checkData();
+    setTimeout(() => {
+      console.log(uploadImage);
+    }, 2000);
+  }, []);
+  // ==================== GET DATA ==================== //
 
   return (
     <View>
@@ -264,7 +311,7 @@ const FormLaporanInstalasi = ({navigation, props}) => {
                     editable={false}
                     onPress={showDatePicker1}
                   />
-                  <DateTimePickerModal
+                  <DateTimePicker
                     isVisible={isDatePickerVisible1}
                     mode="date"
                     onConfirm={handleConfirm1}
@@ -440,7 +487,13 @@ const FormLaporanInstalasi = ({navigation, props}) => {
                       width: '100%',
                       height: windowHeight * 0.18,
                     }}>
-                    <TouchableOpacity style={styles.btnPlus}>
+                    <TouchableOpacity
+                      style={styles.btnPlus}
+                      onPress={() => {
+                        navigation.navigate('UploadImage', {
+                          id: id,
+                        });
+                      }}>
                       <Image source={plusIcon} style={styles.img} />
                     </TouchableOpacity>
                     <TouchableOpacity

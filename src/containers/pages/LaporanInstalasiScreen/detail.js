@@ -1,11 +1,45 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View, ScrollView, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {windowHeight, windowWidth} from '../../../utils/constans';
 import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
+import axios from 'axios';
 
 const DetailLaporans = ({navigation, route}) => {
-  const {title} = route.params;
+  const {id, title, token} = route.params;
+  const [startIns, setStartIns] = useState();
+  const [completeIns, setCompleteIns] = useState();
+  const [startTra, setStartTra] = useState();
+  const [completeTra, setCompleteTra] = useState();
+  const [conditions, setConditions] = useState([]);
+  const [components, setComponents] = useState([]);
+  const [condition, setCondition] = useState();
+  const [problem, setProblem] = useState();
+  const [status, setStatus] = useState();
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .get(`http://localhost:8000/api/report_instalasi/${id}`)
+      .then(response => {
+        setStartIns(response.data.data[0].start_installation);
+        setCompleteIns(response.data.data[0].complete_installation);
+        setStartTra(response.data.data[0].start_training);
+        setCompleteTra(response.data.data[0].complete_training);
+        setCondition(response.data.data[0].condition);
+        setComponents(response.data.data[0].components);
+        setProblem(response.data.data[0].problem);
+        setStatus(response.data.data[0].status);
+      })
+      .catch(e => {
+        Alert.alert('Gagal!', 'Error: Data Tidak Ditemukan! Status Code: ' + e);
+        console.log(e);
+      });
+  };
   return (
     <View style={styles.container}>
       <View>
@@ -40,7 +74,13 @@ const DetailLaporans = ({navigation, route}) => {
                 <Text style={styles.textSubtitle}>Tanggal Mulai Instalasi</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>12-12-2021</Text>
+                <Text style={styles.textValue}>
+                  {startIns ? (
+                    startIns
+                  ) : (
+                    <Text style={{color: '#d0312d'}}>Belum Terjadwal</Text>
+                  )}
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
@@ -50,7 +90,13 @@ const DetailLaporans = ({navigation, route}) => {
                 </Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>13-12-2021</Text>
+                <Text style={styles.textValue}>
+                  {completeIns ? (
+                    completeIns
+                  ) : (
+                    <Text style={{color: '#d0312d'}}>Belum Terjadwal</Text>
+                  )}
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
@@ -58,7 +104,13 @@ const DetailLaporans = ({navigation, route}) => {
                 <Text style={styles.textSubtitle}>Tanggal Mulai Training</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>14-12-2021</Text>
+                <Text style={styles.textValue}>
+                  {startTra ? (
+                    startTra
+                  ) : (
+                    <Text style={{color: '#d0312d'}}>Belum Terjadwal</Text>
+                  )}
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
@@ -68,7 +120,13 @@ const DetailLaporans = ({navigation, route}) => {
                 </Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>15-12-2021</Text>
+                <Text style={styles.textValue}>
+                  {completeTra ? (
+                    completeTra
+                  ) : (
+                    <Text style={{color: '#d0312d'}}>Belum Terjadwal</Text>
+                  )}
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
@@ -76,31 +134,43 @@ const DetailLaporans = ({navigation, route}) => {
                 <Text style={styles.textSubtitle}>Komponen Sistem</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>- Ticketing</Text>
-                <Text style={styles.textValue}>- Caller</Text>
-                <Text style={styles.textValue}>- Digital Singage</Text>
-                <Text style={styles.textValue}>- Hardware</Text>
-                <Text style={styles.textValue}>- Jaringan</Text>
+                {components ? (
+                  components > 1 ? (
+                    components.map(row => {
+                      <View>
+                        <Text>- {row}</Text>;
+                      </View>;
+                    })
+                  ) : (
+                    <Text>- {components}</Text>
+                  )
+                ) : (
+                  <View>
+                    <Text style={{color: '#d0312d'}}>Tidak Ada Data</Text>
+                  </View>
+                )}
               </View>
             </View>
+            {/* <View style={styles.rowSubtitle}>
+              <View style={{width: windowWidth * 0.4}}>
+                <Text style={styles.textSubtitle}>Kondisi Sistem</Text>
+              </View>
+              <View style={styles.rowValue}>
+                <Text style={styles.textValue}>- {condition}</Text>
+              </View>
+            </View> */}
             <View style={styles.rowSubtitle}>
               <View style={{width: windowWidth * 0.4}}>
                 <Text style={styles.textSubtitle}>Kondisi Sistem</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>- Ticketing</Text>
-                <Text style={styles.textValue}>- Caller</Text>
-                <Text style={styles.textValue}>- Digital Singage</Text>
-                <Text style={styles.textValue}>- Hardware</Text>
-                <Text style={styles.textValue}>- Jaringan</Text>
-              </View>
-            </View>
-            <View style={styles.rowSubtitle}>
-              <View style={{width: windowWidth * 0.4}}>
-                <Text style={styles.textSubtitle}>Kondisi Sistem</Text>
-              </View>
-              <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Sistem Sedang Berjalan</Text>
+                <Text style={styles.textValue}>
+                  {condition ? (
+                    condition
+                  ) : (
+                    <Text style={{color: '#d0312d'}}>Tidak Ada Data</Text>
+                  )}
+                </Text>
               </View>
             </View>
             <View style={styles.rowSubtitle}>
@@ -109,7 +179,11 @@ const DetailLaporans = ({navigation, route}) => {
               </View>
               <View style={styles.rowValue}>
                 <Text style={styles.textValue}>
-                  Sistem Tidak Dapat Berjalan
+                  {problem ? (
+                    problem
+                  ) : (
+                    <Text style={{color: '#3A5311'}}>Tidak Ada</Text>
+                  )}
                 </Text>
               </View>
             </View>
@@ -118,7 +192,11 @@ const DetailLaporans = ({navigation, route}) => {
                 <Text style={styles.textSubtitle}>Status</Text>
               </View>
               <View style={styles.rowValue}>
-                <Text style={styles.textValue}>Diproses</Text>
+                {process == 1 ? (
+                  <Text style={styles.textValue}>Diproses</Text>
+                ) : (
+                  <Text style={styles.textValue}>Selesai</Text>
+                )}
               </View>
             </View>
           </ScrollView>

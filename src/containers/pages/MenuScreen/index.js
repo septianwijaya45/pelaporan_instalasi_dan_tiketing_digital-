@@ -5,12 +5,61 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {windowHeight, windowWidth} from '../../../utils/constans';
 import {defaultIcon, laporanIcon, logoutIcon, tugasIcon} from '../../../asset';
+import axios from 'axios';
 
-const MenuScreen = ({navigation}) => {
+const MenuScreen = ({navigation, route}) => {
+  const {user, name, token} = route.params;
+  const [idUser, setIdUser] = useState('');
+  const [totalData, setTotalData] = useState('');
+
+  const countDataReport = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .get(`http://localhost:8000/api/total-instalasi`)
+      .then(response => {
+        setTotalData(response.data);
+      })
+      .catch(e => {
+        Alert.alert('Gagal!', 'Error: ' + e);
+        console.log(e);
+      });
+  };
+
+  const getIdUser = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .get(`http://localhost:8000/api/user/${name}`)
+      .then(response => {
+        setIdUser(response.data.id);
+      })
+      .catch(e => {
+        Alert.alert('Gagal!', 'Error: ' + e);
+        console.log(e);
+      });
+  };
+
+  const logout = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .post(`http://localhost:8000/api/user/logout`)
+      .then(response => {
+        navigation.replace('LoginScreen');
+      })
+      .catch(e => {
+        Alert.alert('Gagal!', 'Error: ' + e);
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getIdUser();
+    countDataReport();
+  }, []);
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -20,8 +69,8 @@ const MenuScreen = ({navigation}) => {
           </View>
           <View style={styles.textImage}>
             <View style={{flexDirection: 'column'}}>
-              <Text style={styles.text1}>Hi Teknisi !</Text>
-              <Text>ID : 00003</Text>
+              <Text style={styles.text1}>Hi {user} !</Text>
+              <Text>ID : {idUser}</Text>
             </View>
           </View>
         </View>
@@ -29,19 +78,23 @@ const MenuScreen = ({navigation}) => {
           <View style={styles.menu1}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Tugas');
+                navigation.navigate('Tugas', {
+                  token: token,
+                });
               }}>
               <Image source={tugasIcon} style={styles.iconTugas} />
             </TouchableOpacity>
-            <View style={styles.infoTugas}>
-              <Text style={styles.infoTugasText}>3</Text>
-            </View>
+            {totalData ? (
+              <View style={styles.infoTugas}>
+                <Text style={styles.infoTugasText}>{totalData}</Text>
+              </View>
+            ) : null}
           </View>
           <Text style={styles.text2}>Tugas Instalasi</Text>
           <View style={styles.menu2}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('LaporanInstalasi');
+                navigation.navigate('LaporanInstalasi', {token: token});
               }}>
               <View style={styles.menu21}>
                 <Image source={laporanIcon} style={styles.iconTugas} />
@@ -62,11 +115,13 @@ const MenuScreen = ({navigation}) => {
                 Laporan Instalasi
               </Text>
             </View>
-            <View style={{width: windowWidth * 0.5}}>
+            <TouchableOpacity
+              style={{width: windowWidth * 0.5}}
+              onPress={logout}>
               <Text style={{color: '#000000', alignSelf: 'center', width: 60}}>
                 Logout
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -101,7 +156,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textImage: {
-    width: 100,
+    width: 250,
     height: 100,
     marginLeft: -20,
     marginVertical: (windowHeight * 0.16) / 5,

@@ -8,12 +8,14 @@ import DetailTugas from '../../containers/pages/TugasInstalasiScreen/detail';
 import FormLaporanInstalasi from '../../containers/pages/TugasInstalasiScreen/insert';
 import LaporanInstalasi from '../../containers/pages/LaporanInstalasiScreen';
 import DetailLaporans from '../../containers/pages/LaporanInstalasiScreen/detail';
+import uploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage';
+import UploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage';
 
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="FormLaporanInstalasi">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -53,6 +55,12 @@ const Router = () => {
       <Stack.Screen
         name="DetailLaporanInstalasi"
         component={DetailLaporans}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="UploadImage"
+        component={UploadImage}
         options={{
           headerShown: false,
         }}></Stack.Screen>

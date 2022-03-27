@@ -4,13 +4,34 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {windowHeight, windowWidth} from '../../../utils/constans';
 import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
+import axios from 'axios';
 
-const LaporanInstalasi = ({navigation}) => {
+const LaporanInstalasi = ({navigation, route}) => {
+  const {token} = route.params;
+  const [data, setData] = useState([]);
+
+  const getData = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .get(`http://localhost:8000/api/report_instalasi`)
+      .then(response => {
+        setData(response.data.data);
+      })
+      .catch(e => {
+        Alert.alert('Gagal!', 'Error: ' + e);
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <View>
       <View>
@@ -39,41 +60,21 @@ const LaporanInstalasi = ({navigation}) => {
         </View>
       </View>
       <ScrollView style={styles.data}>
-        <View style={styles.dataList}>
-          <Text style={styles.title}>Instalasi BRI</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('DetailLaporanInstalasi', {
-                title: 'Instalasi BRI',
-              });
-            }}>
-            <Text style={styles.detail}>Klik Detail</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dataList}>
-          <Text style={styles.title}>Instalasi BRI</Text>
-          <TouchableOpacity>
-            <Text style={styles.detail}>Klik Detail</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dataList}>
-          <Text style={styles.title}>Instalasi PT</Text>
-          <TouchableOpacity>
-            <Text style={styles.detail}>Klik Detail</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dataList}>
-          <Text style={styles.title}>Instalasi BRI</Text>
-          <TouchableOpacity>
-            <Text style={styles.detail}>Klik Detail</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dataList}>
-          <Text style={styles.title}>Instalasi PT</Text>
-          <TouchableOpacity>
-            <Text style={styles.detail}>Klik Detail</Text>
-          </TouchableOpacity>
-        </View>
+        {data.map(row => (
+          <View style={styles.dataList} key={row.id}>
+            <Text style={styles.title}>{row.category_instansi}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('DetailLaporanInstalasi', {
+                  id: row.id,
+                  title: row.category_instansi,
+                  token: token,
+                });
+              }}>
+              <Text style={styles.detail}>Klik Detail</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );

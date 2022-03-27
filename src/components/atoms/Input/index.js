@@ -13,12 +13,14 @@ const Input = ({placeholder, type, onPress, ...rest}) => {
   if (type == 'Date') {
     return (
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TextInput
-          style={styles.input}
-          placeholder={placeholder}
-          placeholderTextColor={'#000000'}
-          {...rest}
-        />
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder={placeholder}
+            placeholderTextColor={'#000000'}
+            {...rest}
+          />
+        </View>
         <TouchableOpacity onPress={onPress}>
           <Image source={calendarIcon} style={styles.img} />
         </TouchableOpacity>
