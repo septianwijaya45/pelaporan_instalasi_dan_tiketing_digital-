@@ -12,6 +12,8 @@ target 'pelaporan_instalasi_dan_tiketing_digital' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
   target 'pelaporan_instalasi_dan_tiketing_digitalTests' do
     inherit! :complete
     # Pods for testing

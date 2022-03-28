@@ -23,7 +23,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import DocumentPicker from 'react-native-document-picker';
 
 const FormLaporanInstalasi = ({navigation, route}) => {
-  const {id} = route.params;
+  const {id, token} = route.params;
   // Jadwal
   const [tglMulaiInstalasi, setTglMulaiInstalasi] = useState();
   const [tglSelesaiInstalasi, setTglSelesaiInstalasi] = useState();
@@ -37,12 +37,17 @@ const FormLaporanInstalasi = ({navigation, route}) => {
   // Informasi
   const [kondisi, setKondisi] = useState('');
   const [problem, setProblem] = useState('');
+  const [idAnydesk, setidAnydesk] = useState('');
   // Foto
-  const [foto, setFoto] = useState([]);
-  const [uploadImage, setuploadImage] = useState();
+  const [foto1, setFoto1] = useState();
+  const [foto2, setFoto2] = useState();
+  const [foto3, setFoto3] = useState();
+  const [foto4, setFoto4] = useState();
+  const [foto5, setFoto5] = useState();
   const [Video, setVideo] = useState();
-  const [uploadVideo, setUploadVideo] = useState();
-  const [bast, setBast] = useState([]);
+  const [fotoBast1, setFotoBast1] = useState();
+  const [fotoBast2, setFotoBast2] = useState();
+  const [fotoBast3, setFotoBast3] = useState();
   const [uploadBast, setuploadBast] = useState();
 
   const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
@@ -141,11 +146,119 @@ const FormLaporanInstalasi = ({navigation, route}) => {
 
   useEffect(() => {
     checkData();
-    setTimeout(() => {
-      console.log(uploadImage);
-    }, 2000);
+    cekFoto();
+    cekFotoBast();
+    cekVideo();
   }, []);
   // ==================== GET DATA ==================== //
+
+  // ==================== CEK IMAGE DATA ==================== //
+
+  const cekFoto = () => {
+    axios
+      .get(`http://localhost:8000/api/report_instalasi-foto/${id}`)
+      .then(response => {
+        const data = response.data;
+        if (data == '') {
+        } else {
+          setFoto1(data[0].photos);
+          setFoto2(data[1].photos);
+          setFoto3(data[2].photos);
+          setFoto4(data[3].photos);
+          setFoto5(data[4].photos);
+        }
+      });
+  };
+
+  const cekFotoBast = () => {
+    axios
+      .get(`http://localhost:8000/api/report_instalasi-foto-bast/${id}`)
+      .then(response => {
+        const data = response.data;
+        if (data == '') {
+        } else {
+          setFotoBast1(data[0].photos);
+          setFotoBast2(data[1].photos);
+          setFotoBast3(data[2].photos);
+        }
+      });
+  };
+
+  const cekVideo = () => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .get(`http://localhost:8000/api/report_instalasi-video/${id}`)
+      .then(response => {
+        const data = response.data;
+        if (data == '') {
+        } else {
+          setVideo(data.video);
+        }
+      });
+  };
+
+  const draftData = () => {
+    const data = {
+      tglMulaiInstalasi,
+      tglSelesaiInstalasi,
+      tglMulaiTraining,
+      tglSelesaiTraining,
+      tiketing,
+      caller,
+      digitalSignage,
+      hardware,
+      jaringan,
+      kondisi,
+      problem,
+      idAnydesk,
+    };
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .post(`http://localhost:8000/api/report_instalasi/${id}`, data)
+      .then(res => {
+        if (res.status == 200) {
+          Alert.alert('Sukses!', 'Sukses Menambahkan Draft Data!');
+          navigation.navigate('Tugas', {
+            token: token,
+          });
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  const saveData = () => {
+    const data = {
+      tglMulaiInstalasi,
+      tglSelesaiInstalasi,
+      tglMulaiTraining,
+      tglSelesaiTraining,
+      tiketing,
+      caller,
+      digitalSignage,
+      hardware,
+      jaringan,
+      kondisi,
+      problem,
+      idAnydesk,
+    };
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios
+      .post(`http://localhost:8000/api/report_instalasi-save/${id}`, data)
+      .then(res => {
+        if (res.status == 200) {
+          Alert.alert('Sukses!', 'Sukses Menambahkan Draft Data!');
+          navigation.navigate('Tugas', {
+            token: token,
+          });
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+  // ==================== UPLOAD IMAGE DATA ==================== //
 
   return (
     <View>
@@ -464,7 +577,11 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                 </View>
                 <View style={{marginTop: 10}}>
                   <Text style={{color: '#000000'}}>ID ANYDESK</Text>
-                  <TextInput style={styles.textInput2} />
+                  <TextInput
+                    style={styles.textInput2}
+                    value={idAnydesk}
+                    onChangeText={text => setidAnydesk(text)}
+                  />
                 </View>
               </ScrollView>
               <Text
@@ -492,6 +609,7 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                       onPress={() => {
                         navigation.navigate('UploadImage', {
                           id: id,
+                          token: token,
                         });
                       }}>
                       <Image source={plusIcon} style={styles.img} />
@@ -501,28 +619,70 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                         styles.imgPreview,
                         {marginHorizontal: 5, marginTop: 5},
                       ]}>
-                      <Image source={picture} style={styles.img} />
+                      <Image
+                        source={
+                          foto1
+                            ? {uri: `http://localhost:8000/uploads/${foto1}`}
+                            : picture
+                        }
+                        style={styles.img}
+                      />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[
                         styles.imgPreview,
                         {marginHorizontal: 5, marginTop: 5},
                       ]}>
-                      <Image source={picture} style={styles.img} />
+                      <Image
+                        source={
+                          foto2
+                            ? {uri: `http://localhost:8000/uploads/${foto2}`}
+                            : picture
+                        }
+                        style={styles.img}
+                      />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[
                         styles.imgPreview,
                         {marginHorizontal: 5, marginTop: 5},
                       ]}>
-                      <Image source={picture} style={styles.img} />
+                      <Image
+                        source={
+                          foto3
+                            ? {uri: `http://localhost:8000/uploads/${foto3}`}
+                            : picture
+                        }
+                        style={styles.img}
+                      />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[
                         styles.imgPreview,
                         {marginHorizontal: 5, marginTop: 5},
                       ]}>
-                      <Image source={picture} style={styles.img} />
+                      <Image
+                        source={
+                          foto4
+                            ? {uri: `http://localhost:8000/uploads/${foto4}`}
+                            : picture
+                        }
+                        style={styles.img}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.imgPreview,
+                        {marginHorizontal: 5, marginTop: 5},
+                      ]}>
+                      <Image
+                        source={
+                          foto5
+                            ? {uri: `http://localhost:8000/uploads/${foto5}`}
+                            : picture
+                        }
+                        style={styles.img}
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -530,9 +690,20 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                   <Text style={{color: '#000000'}}>
                     Upload Video (Max 50 mb)
                   </Text>
-                  <TouchableOpacity style={styles.btnPlusVideo}>
-                    <Image source={plusIcon} style={styles.img} />
-                  </TouchableOpacity>
+                  {Video ? (
+                    <Text>http://localhost:8000/uploads/{Video}</Text>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.btnPlusVideo}
+                      onPress={() => {
+                        navigation.navigate('UploadVideo', {
+                          id: id,
+                          token: token,
+                        });
+                      }}>
+                      <Image source={plusIcon} style={styles.img} />
+                    </TouchableOpacity>
+                  )}
                 </View>
                 <View style={{marginTop: 10}}>
                   <Text style={{color: '#000000'}}>
@@ -546,7 +717,14 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                         width: '100%',
                         height: windowHeight * 0.18,
                       }}>
-                      <TouchableOpacity style={styles.btnPlus}>
+                      <TouchableOpacity
+                        style={styles.btnPlus}
+                        onPress={() => {
+                          navigation.navigate('UploadImageBast', {
+                            id: id,
+                            token: token,
+                          });
+                        }}>
                         <Image source={plusIcon} style={styles.img} />
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -554,21 +732,48 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                           styles.imgPreview,
                           {marginHorizontal: 5, marginTop: 5},
                         ]}>
-                        <Image source={picture} style={styles.img} />
+                        <Image
+                          source={
+                            fotoBast1
+                              ? {
+                                  uri: `http://localhost:8000/uploads/${fotoBast1}`,
+                                }
+                              : picture
+                          }
+                          style={styles.img}
+                        />
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={[
                           styles.imgPreview,
                           {marginHorizontal: 5, marginTop: 5},
                         ]}>
-                        <Image source={picture} style={styles.img} />
+                        <Image
+                          source={
+                            fotoBast1
+                              ? {
+                                  uri: `http://localhost:8000/uploads/${fotoBast1}`,
+                                }
+                              : picture
+                          }
+                          style={styles.img}
+                        />
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={[
                           styles.imgPreview,
                           {marginHorizontal: 5, marginTop: 5},
                         ]}>
-                        <Image source={picture} style={styles.img} />
+                        <Image
+                          source={
+                            fotoBast1
+                              ? {
+                                  uri: `http://localhost:8000/uploads/${fotoBast1}`,
+                                }
+                              : picture
+                          }
+                          style={styles.img}
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -590,10 +795,26 @@ const FormLaporanInstalasi = ({navigation, route}) => {
               marginVertical: 20,
             }}>
             <View style={{width: windowWidth * 0.2, marginHorizontal: 10}}>
-              <Button name="Draft" type="Draft" />
+              <TouchableOpacity style={styles.draft} onPress={draftData}>
+                <Text
+                  style={{
+                    color: '#000000',
+                    alignSelf: 'center',
+                  }}>
+                  Draft
+                </Text>
+              </TouchableOpacity>
             </View>
             <View style={{width: windowWidth * 0.2, marginHorizontal: 10}}>
-              <Button name="Save" type="Save" />
+              <TouchableOpacity style={styles.draft2} onPress={saveData}>
+                <Text
+                  style={{
+                    color: '#000000',
+                    alignSelf: 'center',
+                  }}>
+                  Save
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : null}
@@ -734,5 +955,19 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     justifyContent: 'center',
+  },
+  draft: {
+    backgroundColor: '#FAC800',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 20,
+    width: windowWidth * 0.2,
+  },
+  draft2: {
+    backgroundColor: '#289E53',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 20,
+    width: windowWidth * 0.2,
   },
 });

@@ -210,6 +210,7 @@ const DetailTugas = ({navigation, route}) => {
           onPress={() => {
             navigation.navigate('FormLaporanInstalasi', {
               id: id,
+              token: token,
             });
           }}
         />

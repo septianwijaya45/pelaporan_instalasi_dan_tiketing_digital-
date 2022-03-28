@@ -10,6 +10,8 @@ import LaporanInstalasi from '../../containers/pages/LaporanInstalasiScreen';
 import DetailLaporans from '../../containers/pages/LaporanInstalasiScreen/detail';
 import uploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage';
 import UploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage';
+import UploadImageBast from '../../containers/pages/TugasInstalasiScreen/uploadImageBast';
+import UploadVideo from '../../containers/pages/TugasInstalasiScreen/uploadVideo';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +63,18 @@ const Router = () => {
       <Stack.Screen
         name="UploadImage"
         component={UploadImage}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="UploadImageBast"
+        component={UploadImageBast}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="UploadVideo"
+        component={UploadVideo}
         options={{
           headerShown: false,
         }}></Stack.Screen>

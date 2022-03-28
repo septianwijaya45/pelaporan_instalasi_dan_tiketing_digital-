@@ -5,26 +5,24 @@ import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
 import {windowHeight} from '../../../utils/constans';
 
-const UploadImage = ({navigation, route}) => {
+const UploadVideo = ({navigation, route}) => {
   const [singleFile, setSingleFile] = useState(null);
   const {id, token} = route.params;
-
   const uploadImage = async () => {
     // Check if any file is selected or not
     if (singleFile != null) {
       // If file selected then create FormData
       const fileToUpload = singleFile;
       const data = new FormData();
-      console.log(fileToUpload);
       //   data.append('name', 'Image Upload');
-      data.append('photos', {
-        type: 'image/jpeg',
+      data.append('video', {
+        type: 'video/mp4',
         uri: fileToUpload.uri,
         name: fileToUpload.name,
       });
       // Please change file upload URL
       let res = await fetch(
-        `http://localhost:8000/api/report_instalasi/${id}/uploadPhoto`,
+        `http://localhost:8000/api/report_instalasi/${id}/uploadVideo`,
         {
           method: 'post',
           body: data,
@@ -33,13 +31,6 @@ const UploadImage = ({navigation, route}) => {
           },
         },
       );
-      //     .then(res => {
-      //       Alert.alert('Upload Successful');
-      //       navigation.goBack();
-      //     })
-      //     .catch(e => {
-      //       console.log(e);
-      //     });
       let responseJson = await res.json();
       console.log(responseJson);
       if (responseJson.success) {
@@ -145,7 +136,7 @@ const UploadImage = ({navigation, route}) => {
   );
 };
 
-export default UploadImage;
+export default UploadVideo;
 
 const styles = StyleSheet.create({
   header: {

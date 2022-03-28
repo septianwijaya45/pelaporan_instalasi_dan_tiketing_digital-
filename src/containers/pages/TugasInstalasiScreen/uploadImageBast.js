@@ -5,7 +5,7 @@ import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
 import {windowHeight} from '../../../utils/constans';
 
-const UploadImage = ({navigation, route}) => {
+const UploadImageBast = ({navigation, route}) => {
   const [singleFile, setSingleFile] = useState(null);
   const {id, token} = route.params;
 
@@ -24,7 +24,7 @@ const UploadImage = ({navigation, route}) => {
       });
       // Please change file upload URL
       let res = await fetch(
-        `http://localhost:8000/api/report_instalasi/${id}/uploadPhoto`,
+        `http://localhost:8000/api/report_instalasi/${id}/uploadPhotoBast`,
         {
           method: 'post',
           body: data,
@@ -33,15 +33,8 @@ const UploadImage = ({navigation, route}) => {
           },
         },
       );
-      //     .then(res => {
-      //       Alert.alert('Upload Successful');
-      //       navigation.goBack();
-      //     })
-      //     .catch(e => {
-      //       console.log(e);
-      //     });
       let responseJson = await res.json();
-      console.log(responseJson);
+      console.log(responseJson.success);
       if (responseJson.success) {
         Alert.alert('Upload Successful');
         navigation.goBack();
@@ -145,7 +138,7 @@ const UploadImage = ({navigation, route}) => {
   );
 };
 
-export default UploadImage;
+export default UploadImageBast;
 
 const styles = StyleSheet.create({
   header: {
