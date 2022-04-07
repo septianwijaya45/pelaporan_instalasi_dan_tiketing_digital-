@@ -6,7 +6,7 @@ import Home from '../../../components/atoms/Home';
 import axios from 'axios';
 
 const DetailLaporans = ({navigation, route}) => {
-  const {id, title, token} = route.params;
+  const {id, title, token, user} = route.params;
   const [startIns, setStartIns] = useState();
   const [completeIns, setCompleteIns] = useState();
   const [startTra, setStartTra] = useState();
@@ -26,14 +26,18 @@ const DetailLaporans = ({navigation, route}) => {
     axios
       .get(`http://localhost:8000/api/report_instalasi/${id}`)
       .then(response => {
-        setStartIns(response.data.data[0].start_installation);
-        setCompleteIns(response.data.data[0].complete_installation);
-        setStartTra(response.data.data[0].start_training);
-        setCompleteTra(response.data.data[0].complete_training);
-        setCondition(response.data.data[0].condition);
-        setComponents(response.data.data[0].components);
-        setProblem(response.data.data[0].problem);
-        setStatus(response.data.data[0].status);
+        if (!response.data[0]) {
+          Alert.alert('Gagal!', 'Data Tidak Ditemukan!');
+        } else {
+          setStartIns(response.data.data[0].start_installation);
+          setCompleteIns(response.data.data[0].complete_installation);
+          setStartTra(response.data.data[0].start_training);
+          setCompleteTra(response.data.data[0].complete_training);
+          setCondition(response.data.data[0].condition);
+          setComponents(response.data.data[0].components);
+          setProblem(response.data.data[0].problem);
+          setStatus(response.data.data[0].status);
+        }
       })
       .catch(e => {
         Alert.alert('Gagal!', 'Error: Data Tidak Ditemukan! Status Code: ' + e);
@@ -57,7 +61,7 @@ const DetailLaporans = ({navigation, route}) => {
           <View style={styles.rowHome}>
             <Home
               onPress={() => {
-                navigation.navigate('Menu');
+                navigation.navigate('Menu', {user: user});
               }}
             />
           </View>

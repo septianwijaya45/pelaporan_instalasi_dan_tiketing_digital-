@@ -13,7 +13,7 @@ import Home from '../../../components/atoms/Home';
 import axios from 'axios';
 
 const LaporanInstalasi = ({navigation, route}) => {
-  const {token} = route.params;
+  const {token, user} = route.params;
   const [data, setData] = useState([]);
 
   const getData = () => {
@@ -30,6 +30,7 @@ const LaporanInstalasi = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    console.log(token);
     getData();
   }, []);
   return (
@@ -52,7 +53,7 @@ const LaporanInstalasi = ({navigation, route}) => {
             <View style={styles.rowHome}>
               <Home
                 onPress={() => {
-                  navigation.navigate('Menu');
+                  navigation.navigate('Menu', {user: user});
                 }}
               />
             </View>

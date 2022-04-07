@@ -23,7 +23,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import DocumentPicker from 'react-native-document-picker';
 
 const FormLaporanInstalasi = ({navigation, route}) => {
-  const {id, token} = route.params;
+  const {id, token, user} = route.params;
   // Jadwal
   const [tglMulaiInstalasi, setTglMulaiInstalasi] = useState();
   const [tglSelesaiInstalasi, setTglSelesaiInstalasi] = useState();
@@ -159,6 +159,7 @@ const FormLaporanInstalasi = ({navigation, route}) => {
       .get(`http://localhost:8000/api/report_instalasi-foto/${id}`)
       .then(response => {
         const data = response.data;
+        console.log(id);
         if (data == '') {
         } else {
           setFoto1(data[0].photos);
@@ -280,7 +281,7 @@ const FormLaporanInstalasi = ({navigation, route}) => {
             <View style={styles.rowHome}>
               <Home
                 onPress={() => {
-                  navigation.navigate('Menu');
+                  navigation.navigate('Menu', {user: user});
                 }}
               />
             </View>

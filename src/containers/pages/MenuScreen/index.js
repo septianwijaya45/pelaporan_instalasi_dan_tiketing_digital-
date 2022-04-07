@@ -59,6 +59,7 @@ const MenuScreen = ({navigation, route}) => {
   useEffect(() => {
     getIdUser();
     countDataReport();
+    console.log(token);
   }, []);
   return (
     <View style={styles.container}>
@@ -80,6 +81,7 @@ const MenuScreen = ({navigation, route}) => {
               onPress={() => {
                 navigation.navigate('Tugas', {
                   token: token,
+                  user: user,
                 });
               }}>
               <Image source={tugasIcon} style={styles.iconTugas} />
@@ -94,7 +96,10 @@ const MenuScreen = ({navigation, route}) => {
           <View style={styles.menu2}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('LaporanInstalasi', {token: token});
+                navigation.navigate('LaporanInstalasi', {
+                  token: token,
+                  user: user,
+                });
               }}>
               <View style={styles.menu21}>
                 <Image source={laporanIcon} style={styles.iconTugas} />

@@ -13,7 +13,7 @@ import Home from '../../../components/atoms/Home';
 import axios from 'axios';
 
 const TugasInstalasi = ({navigation, route}) => {
-  const {token} = route.params;
+  const {token, user} = route.params;
   const [data, setData] = useState([]);
 
   const getData = () => {
@@ -54,7 +54,7 @@ const TugasInstalasi = ({navigation, route}) => {
             <View style={styles.rowHome}>
               <Home
                 onPress={() => {
-                  navigation.navigate('Menu');
+                  navigation.navigate('Menu', {user: user});
                 }}
               />
             </View>
@@ -71,6 +71,7 @@ const TugasInstalasi = ({navigation, route}) => {
                   id: row.id,
                   title: row.category_instansi,
                   token: token,
+                  user: user,
                 });
               }}>
               <Text style={styles.detail}>Klik Detail</Text>

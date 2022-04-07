@@ -7,7 +7,7 @@ import Button from '../../../components/atoms/Button';
 import axios from 'axios';
 
 const DetailTugas = ({navigation, route}) => {
-  const {id, title, token} = route.params;
+  const {id, title, token, user} = route.params;
 
   const [kategori, setKategori] = useState();
   const [instansi, setInstansi] = useState();
@@ -62,7 +62,7 @@ const DetailTugas = ({navigation, route}) => {
           <View style={styles.rowHome}>
             <Home
               onPress={() => {
-                navigation.navigate('Menu');
+                navigation.navigate('Menu', {user: user});
               }}
             />
           </View>
@@ -211,6 +211,7 @@ const DetailTugas = ({navigation, route}) => {
             navigation.navigate('FormLaporanInstalasi', {
               id: id,
               token: token,
+              user: user,
             });
           }}
         />
