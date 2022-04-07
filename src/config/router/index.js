@@ -12,6 +12,7 @@ import uploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage
 import UploadImage from '../../containers/pages/TugasInstalasiScreen/uploadImage';
 import UploadImageBast from '../../containers/pages/TugasInstalasiScreen/uploadImageBast';
 import UploadVideo from '../../containers/pages/TugasInstalasiScreen/uploadVideo';
+import TambahInstalasi from '../../containers/pages/TugasInstalasiScreen/insertTugas';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,12 @@ const Router = () => {
       <Stack.Screen
         name="Tugas"
         component={TugasInstalasi}
+        options={{
+          headerShown: false,
+        }}></Stack.Screen>
+      <Stack.Screen
+        name="TambahTugas"
+        component={TambahInstalasi}
         options={{
           headerShown: false,
         }}></Stack.Screen>

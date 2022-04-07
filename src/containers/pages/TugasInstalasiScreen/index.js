@@ -11,6 +11,7 @@ import Back from '../../../components/atoms/Back';
 import {windowHeight, windowWidth} from '../../../utils/constans';
 import Home from '../../../components/atoms/Home';
 import axios from 'axios';
+import Add from '../../../components/atoms/Add';
 
 const TugasInstalasi = ({navigation, route}) => {
   const {token, user} = route.params;
@@ -52,6 +53,15 @@ const TugasInstalasi = ({navigation, route}) => {
               </Text>
             </View>
             <View style={styles.rowHome}>
+              <Add
+                onPress={() => {
+                  navigation.navigate('TambahTugas', {
+                    user: user,
+                    token: token,
+                  });
+                }}
+                style={{marginRight: 5}}
+              />
               <Home
                 onPress={() => {
                   navigation.navigate('Menu', {user: user});
@@ -103,6 +113,7 @@ const styles = StyleSheet.create({
   rowHome: {
     position: 'absolute',
     right: 0,
+    flexDirection: 'row',
   },
   data: {
     marginTop: windowHeight * 0.07,

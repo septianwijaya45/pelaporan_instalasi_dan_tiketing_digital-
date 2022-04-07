@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.12",
     "@react-native-community/datetimepicker": "^6.0.2",
+    "@react-native-picker/picker": "^2.4.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "axios": "^0.26.1",

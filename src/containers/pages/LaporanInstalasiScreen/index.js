@@ -11,6 +11,7 @@ import {windowHeight, windowWidth} from '../../../utils/constans';
 import Back from '../../../components/atoms/Back';
 import Home from '../../../components/atoms/Home';
 import axios from 'axios';
+import Add from '../../../components/atoms/Add';
 
 const LaporanInstalasi = ({navigation, route}) => {
   const {token, user} = route.params;

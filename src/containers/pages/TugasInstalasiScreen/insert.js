@@ -481,7 +481,7 @@ const FormLaporanInstalasi = ({navigation, route}) => {
                     type="Date"
                     value={tglSelesaiTraining}
                     onTextChange={value => {
-                      setTglSelesaiInstalasi(value);
+                      setTglSelesaiTraining(value);
                     }}
                     ditable={false}
                     onPress={showDatePicker4}
